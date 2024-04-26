@@ -1,4 +1,4 @@
-namespace TaxiFarePrediction
+namespace TaxiFare
 
 module DataStructures =
     open Microsoft.ML.Data

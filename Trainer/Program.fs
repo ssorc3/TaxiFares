@@ -2,6 +2,7 @@
 open Microsoft.ML
 open Microsoft.ML.Data
 open Microsoft.ML.Transforms
+open TaxiFare.DataStructures
 
 let baseDatasetsLocation = @"../Data"
 let trainDataPath = $"{baseDatasetsLocation}/taxi-fare-train.csv"
@@ -15,9 +16,9 @@ let downcastPipeline (x : IEstimator<_>) =
     | :? IEstimator<ITransformer> as y -> y
     | _ -> failwith "downcastPipeline: expecting an IEstimator<ITransformer>"
 
-let mlContext = new MLContext(seed = 0)
-let baseTrainingDataView = mlContext.Data.LoadFromTextFile(trainDataPath, hasHeader = true, separatorChar = ',')
-let testDataView = mlContext.Data.LoadFromTextFile(testDataPath, hasHeader = true, separatorChar = ',')
+let mlContext = new MLContext()
+let baseTrainingDataView = mlContext.Data.LoadFromTextFile<TaxiTrip>(trainDataPath, hasHeader = true, separatorChar = ',')
+let testDataView = mlContext.Data.LoadFromTextFile<TaxiTrip>(testDataPath, hasHeader = true, separatorChar = ',')
 
 let trainingDataView = mlContext.Data.FilterRowsByColumn(baseTrainingDataView, "FareAmount", lowerBound = 1., upperBound = 150.)
 
